@@ -16,7 +16,8 @@
     "core-js": "^3.4.4",
     "electron-updater": "^4.2.0",
     "vue": "^2.6.10",
-    "vuetify": "^2.1.0"
+    "vuetify": "^2.1.0",
+    "ytdl-core": "^1.0.7"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.1.0",
