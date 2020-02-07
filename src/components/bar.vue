@@ -1,13 +1,13 @@
 <template>
   <v-app-bar
-    absolute
+    app
     color="#9146ff"
     dark
     shrink-on-scroll
     prominent
-    src=""
+    :src="img"
     fade-img-on-scroll
-    scroll-target="#scrolling-techniques-3"
+    scroll-target="#scrolling-techniques"
   >
     <template v-slot:img="{ props }">
       <v-img
@@ -18,7 +18,7 @@
 
     <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-    <v-toolbar-title>Title</v-toolbar-title>
+    <v-toolbar-title>{{ title }}</v-toolbar-title>
 
     <v-spacer></v-spacer>
 
@@ -29,25 +29,41 @@
         v-model="url"
         placeholder="URL"
         prepend-inner-icon="mdi-magnify"
-        color="black"
+        color="#9146ff"
+        @input="update"
       >
       </v-text-field>
     </v-toolbar-items>
-
-    <template v-slot:extension>
-      <v-tabs align-with-title>
-        <v-tab>Single</v-tab>
-      </v-tabs>
-    </template>
   </v-app-bar>
 </template>
 
 <script>
+import ytdl from 'ytdl-core'
+
 export default {
   name: 'bar',
 
   data: () => ({
-    //
-  })
+    url: '',
+    title: 'Youtube Downloader',
+    img: ''
+  }),
+
+  methods: {
+    update () {
+      if (ytdl.validateURL(this.url)) {
+        let id = ytdl.getURLVideoID(this.url)
+        ytdl.getInfo(id, { lang: 'kr' }, (err, info) => {
+          if (err) throw err
+          console.log(info)
+          this.title = info.title
+          this.img = 'https://i.ytimg.com/vi/' + id + '/maxresdefault.jpg'
+        })
+      } else {
+        this.title = 'Youtube Downloader'
+        this.img = ''
+      }
+    }
+  }
 }
 </script>
