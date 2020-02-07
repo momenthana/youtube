@@ -52,12 +52,11 @@ export default {
   methods: {
     update () {
       if (ytdl.validateURL(this.url)) {
-        let id = ytdl.getURLVideoID(this.url)
-        ytdl.getInfo(id, { lang: 'kr' }, (err, info) => {
+        ytdl.getInfo(ytdl.getURLVideoID(this.url), { lang: 'kr' }, (err, info) => {
           if (err) throw err
           console.log(info)
           this.title = info.title
-          this.img = 'https://i.ytimg.com/vi/' + id + '/maxresdefault.jpg'
+          this.img = 'https://i.ytimg.com/vi/' + info.video_id + '/maxresdefault.jpg'
         })
       } else {
         this.title = 'Youtube Downloader'
