@@ -7,7 +7,10 @@ module.exports = {
       builderOptions: {
         appId: 'io.github.momenthana.youtube',
         productName: 'Youtube',
-        publish: 'github'
+        publish: 'github',
+        mac: {
+          darkModeSupport: true
+        }
       }
     }
   }

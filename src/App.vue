@@ -10,16 +10,10 @@ import bar from '@/components/bar'
 import home from '@/components/home'
 
 export default {
-  name: 'App',
-
   components: {
     bar,
     home
   },
-
-  data: () => ({
-    //
-  }),
 
   mounted () {
     const dark = window.matchMedia('(prefers-color-scheme: dark)')

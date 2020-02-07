@@ -41,8 +41,6 @@
 import ytdl from 'ytdl-core'
 
 export default {
-  name: 'bar',
-
   data: () => ({
     url: '',
     title: 'Youtube Downloader',
@@ -51,16 +49,24 @@ export default {
 
   methods: {
     update () {
-      if (ytdl.validateURL(this.url)) {
-        ytdl.getInfo(ytdl.getURLVideoID(this.url), { lang: 'kr' }, (err, info) => {
-          if (err) throw err
-          console.log(info)
-          this.title = info.title
-          this.img = 'https://i.ytimg.com/vi/' + info.video_id + '/maxresdefault.jpg'
-        })
+      if (this.url) {
+        if (ytdl.validateURL(this.url)) {
+          ytdl.getInfo(ytdl.getURLVideoID(this.url), { lang: 'kr' }, (err, info) => {
+            if (err) throw err
+            console.log(info)
+            this.title = info.title
+            this.img = 'https://i.ytimg.com/vi/' + info.video_id + '/maxresdefault.jpg'
+            this.$store.state.formats = info.formats
+          })
+        } else {
+          this.title = 'Youtube Downloader'
+          this.img = ''
+          this.$store.state.formats = ''
+        }
       } else {
         this.title = 'Youtube Downloader'
         this.img = ''
+        this.$store.state.formats = ''
       }
     }
   }
