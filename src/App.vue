@@ -1,18 +1,21 @@
 <template>
   <v-app>
-    <bar/>
-    <home/>
+    <Bar/>
+    <Nav/>
+    <Content/>
   </v-app>
 </template>
 
 <script>
-import bar from '@/components/bar'
-import home from '@/components/home'
+import Bar from '@/components/Bar'
+import Nav from '@/components/Nav'
+import Content from '@/components/Content'
 
 export default {
   components: {
-    bar,
-    home
+    Bar,
+    Nav,
+    Content
   },
 
   mounted () {

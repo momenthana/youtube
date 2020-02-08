@@ -16,7 +16,7 @@
       ></v-img>
     </template>
 
-    <v-app-bar-nav-icon></v-app-bar-nav-icon>
+    <v-app-bar-nav-icon @click="$store.state.drawer = true"></v-app-bar-nav-icon>
 
     <v-toolbar-title>{{ title }}</v-toolbar-title>
 
@@ -49,6 +49,12 @@ export default {
 
   methods: {
     update () {
+      const reset = () => {
+        this.title = 'Youtube Downloader'
+        this.img = ''
+        this.$store.state.formats = ''
+      }
+
       if (this.url) {
         if (ytdl.validateURL(this.url)) {
           ytdl.getInfo(ytdl.getURLVideoID(this.url), { lang: 'kr' }, (err, info) => {
@@ -59,14 +65,10 @@ export default {
             this.$store.state.formats = info.formats
           })
         } else {
-          this.title = 'Youtube Downloader'
-          this.img = ''
-          this.$store.state.formats = ''
+          reset()
         }
       } else {
-        this.title = 'Youtube Downloader'
-        this.img = ''
-        this.$store.state.formats = ''
+        reset()
       }
     }
   }
