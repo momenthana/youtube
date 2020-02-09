@@ -9,7 +9,7 @@
         <v-data-table
           :headers="headers"
           :items="desserts"
-          sort-by="calories"
+          sort-by="quality"
           class="elevation-3"
           hide-default-footer
         >
@@ -21,13 +21,12 @@
                 inset
                 vertical
               ></v-divider>
-              <v-spacer></v-spacer>
             </v-toolbar>
           </template>
           <template v-slot:item.action="{ item }">
             <v-icon
               small
-              @click="download(item)"
+              @click="download(item.itag)"
             >
               mdi-download
             </v-icon>
@@ -39,35 +38,55 @@
 </template>
 
 <script>
+import ytdl from 'ytdl-core'
+import fs from 'fs'
+
 export default {
   data: () => ({
     headers: [
       { text: 'Quality', value: 'quality' },
       { text: 'Extension', value: 'extension' },
       { text: 'Size', value: 'size' },
+      { text: 'Audio', value: 'audio' },
       { text: 'Action', value: 'action', sortable: false }
     ],
-    desserts: []
+    desserts: [],
+    received: 0
   }),
 
-  created () {
-    this.initialize()
+  watch: {
+    '$store.state.formats': function () {
+      this.desserts = []
+      let formats = this.$store.state.formats
+      for (const key in formats) {
+        if (formats.hasOwnProperty(key)) {
+          const element = formats[key]
+          console.log(element)
+          this.desserts.push(
+            {
+              itag: element.itag,
+              quality: element.qualityLabel,
+              extension: element.container,
+              size: element.contentLength,
+              audio: element.audioBitrate
+            }
+          )
+        }
+      }
+    }
   },
 
   methods: {
-    initialize () {
-      this.desserts = [
-        {
-          quality: 1,
-          extension: 1,
-          size: 1
-        }
-      ]
-    },
-
-    download (item) {
-      const index = this.desserts.indexOf(item)
-      confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1)
+    download (itag) {
+      console.log(itag)
+      ytdl(this.$store.state.url, { filter: format => format.itag === itag })
+        .on('data', (chunk) => {
+          this.received += chunk.length
+        })
+        .on('end', () => {
+          console.log(this.received)
+        })
+        .pipe(fs.createWriteStream(`${itag}.mp4`))
     }
   }
 }
