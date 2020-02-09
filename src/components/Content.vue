@@ -9,6 +9,7 @@
         <v-data-table
           :headers="headers"
           :items="desserts"
+          :items-per-page="100"
           sort-by="quality"
           class="elevation-3"
           hide-default-footer
