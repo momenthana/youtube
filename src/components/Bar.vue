@@ -8,6 +8,7 @@
     :src="img"
     fade-img-on-scroll
     scroll-target="#scrolling-techniques"
+    style="-webkit-app-region: drag"
   >
     <template v-slot:img="{ props }">
       <v-img
