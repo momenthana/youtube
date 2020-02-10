@@ -25,10 +25,7 @@
             </v-toolbar>
           </template>
           <template v-slot:item.action="{ item }">
-            <v-icon
-              small
-              @click="download(item.itag)"
-            >
+            <v-icon @click="download(item.itag)">
               mdi-download
             </v-icon>
           </template>
@@ -42,13 +39,27 @@
 import ytdl from 'ytdl-core'
 import fs from 'fs'
 
+function refresh () {
+  this.desserts = []
+  let formats = this.$store.state.formats
+  for (const i of formats) {
+    if (i.container === 'mp4') {
+      this.desserts.push(
+        {
+          itag: i.itag,
+          quality: (this.$store.state.tabs === 'Video' ? i.qualityLabel : i.audioBitrate ? i.audioBitrate + ' kbps' : null),
+          size: i.contentLength ? (i.contentLength / 1024 / 1024).toFixed(0) + ' MB' : ''
+        }
+      )
+    }
+  }
+}
+
 export default {
   data: () => ({
     headers: [
       { text: 'Quality', value: 'quality' },
-      { text: 'Extension', value: 'extension' },
       { text: 'Size', value: 'size' },
-      { text: 'Audio', value: 'audio' },
       { text: 'Action', value: 'action', sortable: false }
     ],
     desserts: [],
@@ -56,25 +67,8 @@ export default {
   }),
 
   watch: {
-    '$store.state.formats': function () {
-      this.desserts = []
-      let formats = this.$store.state.formats
-      for (const key in formats) {
-        if (formats.hasOwnProperty(key)) {
-          const element = formats[key]
-          console.log(element)
-          this.desserts.push(
-            {
-              itag: element.itag,
-              quality: element.qualityLabel,
-              extension: element.container,
-              size: element.contentLength,
-              audio: element.audioBitrate
-            }
-          )
-        }
-      }
-    }
+    '$store.state.formats': refresh,
+    '$store.state.tabs': refresh
   },
 
   methods: {

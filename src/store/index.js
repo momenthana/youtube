@@ -6,7 +6,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     drawer: false,
-    url: '',
-    formats: ''
+    tabs: 'Video',
+    url: null,
+    formats: null
   }
 })

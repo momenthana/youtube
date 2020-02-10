@@ -35,6 +35,13 @@
       >
       </v-text-field>
     </v-toolbar-items>
+
+    <template v-slot:extension>
+      <v-tabs align-with-title>
+        <v-tab @click="$store.state.tabs = 'Video'">Video</v-tab>
+        <v-tab @click="$store.state.tabs = 'Audio'">Audio</v-tab>
+      </v-tabs>
+    </template>
   </v-app-bar>
 </template>
 
