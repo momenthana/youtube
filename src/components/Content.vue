@@ -22,6 +22,21 @@
                 inset
                 vertical
               ></v-divider>
+              <v-spacer></v-spacer>
+              <v-toolbar-items>
+                <v-select
+                  v-model="extension"
+                  :items="$store.state.tabs === 'Video' ? videoExtensions : audioExtensions"
+                  hide-details
+                  outlined
+                  dense
+                  color="#9146ff"
+                  item-color="purple"
+                  class="my-auto"
+                  label="File extension"
+                  prepend-icon="mdi-puzzle"
+                ></v-select>
+              </v-toolbar-items>
             </v-toolbar>
           </template>
           <template v-slot:item.action="{ item }">
@@ -41,17 +56,16 @@ import fs from 'fs'
 
 function refresh () {
   this.desserts = []
+  this.extension = this.$store.state.tabs === 'Video' ? 'mp4' : 'mp3'
   let formats = this.$store.state.formats
   for (const i of formats) {
-    if (i.container === 'mp4') {
-      this.desserts.push(
-        {
-          itag: i.itag,
-          quality: (this.$store.state.tabs === 'Video' ? i.qualityLabel : i.audioBitrate ? i.audioBitrate + ' kbps' : null),
-          size: i.contentLength ? (i.contentLength / 1024 / 1024).toFixed(0) + ' MB' : ''
-        }
-      )
-    }
+    this.desserts.push(
+      {
+        itag: i.itag,
+        quality: this.$store.state.tabs === 'Video' ? i.qualityLabel : i.audioBitrate ? i.audioBitrate + ' kbps' : null,
+        size: i.contentLength ? (i.contentLength / 1024 / 1024).toFixed(0) + ' MB' : ''
+      }
+    )
   }
 }
 
@@ -63,6 +77,9 @@ export default {
       { text: 'Action', value: 'action', sortable: false }
     ],
     desserts: [],
+    videoExtensions: [ 'mp4' ],
+    audioExtensions: [ 'mp3' ],
+    extension: 'mp4',
     received: 0
   }),
 
