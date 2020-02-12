@@ -55,17 +55,19 @@ import ytdl from 'ytdl-core'
 import fs from 'fs'
 
 function refresh () {
+  const formats = this.$store.state.formats
   this.desserts = []
   this.extension = this.$store.state.tabs === 'Video' ? 'mp4' : 'mp3'
-  let formats = this.$store.state.formats
-  for (const i of formats) {
-    this.desserts.push(
-      {
-        itag: i.itag,
-        quality: this.$store.state.tabs === 'Video' ? i.qualityLabel : i.audioBitrate ? i.audioBitrate + ' kbps' : null,
-        size: i.contentLength ? (i.contentLength / 1024 / 1024).toFixed(0) + ' MB' : ''
-      }
-    )
+  if (formats) {
+    for (const i of formats) {
+      this.desserts.push(
+        {
+          quality: this.$store.state.tabs === 'Video' ? i.qualityLabel : i.audioBitrate ? i.audioBitrate + ' kbps' : null,
+          size: i.contentLength ? (i.contentLength / 1024 / 1024).toFixed(0) + ' MB' : '',
+          itag: i.itag
+        }
+      )
+    }
   }
 }
 
@@ -90,7 +92,6 @@ export default {
 
   methods: {
     download (itag) {
-      console.log(itag)
       ytdl(this.$store.state.url, { filter: format => format.itag === itag })
         .on('data', (chunk) => {
           this.received += chunk.length
@@ -98,7 +99,7 @@ export default {
         .on('end', () => {
           console.log(this.received)
         })
-        .pipe(fs.createWriteStream(`${itag}.mp4`))
+        .pipe(fs.createWriteStream(`${itag}.${this.extension}`))
     }
   }
 }
