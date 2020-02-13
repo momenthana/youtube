@@ -12,6 +12,12 @@ module.exports = {
           darkModeSupport: true
         }
       }
+    },
+    i18n: {
+      locale: 'en',
+      fallbackLocale: 'en',
+      localeDir: 'locales',
+      enableInSFC: true
     }
   }
 }
