@@ -56,9 +56,13 @@ import ytdl from 'ytdl-core'
 import fs from 'fs'
 
 function refresh () {
-  const formats = this.$store.state.formats
   this.desserts = []
   this.extension = this.$store.state.tabs === 'Video' ? 'mp4' : 'mp3'
+  let formats = ytdl.filterFormats(this.$store.state.formats, this.$store.state.tabs === 'Video' ? 'videoonly' : 'audioonly')
+  for (const i of ytdl.filterFormats(this.$store.state.formats, 'audioandvideo')) {
+    formats.push(i)
+  }
+
   if (formats) {
     for (const i of formats) {
       this.desserts.push(
