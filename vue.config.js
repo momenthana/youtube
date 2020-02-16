@@ -9,6 +9,7 @@ module.exports = {
         productName: 'Youtube',
         publish: 'github',
         mac: {
+          category: 'public.app-category.utilities',
           darkModeSupport: true
         }
       }
