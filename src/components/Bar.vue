@@ -63,18 +63,14 @@ export default {
       const reset = () => {
         this.title = 'Youtube Downloader'
         this.img = ''
-        this.$store.state.url = ''
-        this.$store.state.formats = ''
       }
 
       if (this.url) {
         if (ytdl.validateURL(this.url)) {
           ytdl.getInfo(ytdl.getURLVideoID(this.url), { lang: 'kr' }, (err, info) => {
             if (err) throw err
-            this.title = info.title
+            this.$store.state.info = info
             this.img = 'https://i.ytimg.com/vi/' + info.video_id + '/maxresdefault.jpg'
-            this.$store.state.url = this.url
-            this.$store.state.formats = info.formats
           })
         } else {
           reset()

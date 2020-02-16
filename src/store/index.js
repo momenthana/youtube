@@ -7,7 +7,6 @@ export default new Vuex.Store({
   state: {
     drawer: false,
     tabs: 'Video',
-    url: null,
-    formats: null
+    info: null
   }
 })

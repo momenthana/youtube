@@ -43,7 +43,7 @@
             <v-icon v-if="item.progress === 0" @click="download(item)">
               mdi-download
             </v-icon>
-            <v-progress-circular v-else :value="item.progress"></v-progress-circular>
+            <v-progress-circular v-else :value="item.progress * 100"></v-progress-circular>
           </template>
         </v-data-table>
       </v-container>
@@ -58,8 +58,8 @@ import fs from 'fs'
 function refresh () {
   this.desserts = []
   this.extension = this.$store.state.tabs === 'Video' ? 'mp4' : 'mp3'
-  let formats = ytdl.filterFormats(this.$store.state.formats, this.$store.state.tabs === 'Video' ? 'videoonly' : 'audioonly')
-  for (const i of ytdl.filterFormats(this.$store.state.formats, 'audioandvideo')) {
+  let formats = ytdl.filterFormats(this.$store.state.info.formats, this.$store.state.tabs === 'Video' ? 'videoonly' : 'audioonly')
+  for (const i of ytdl.filterFormats(this.$store.state.info.formats, 'audioandvideo')) {
     formats.push(i)
   }
 
@@ -91,20 +91,20 @@ export default {
   }),
 
   watch: {
-    '$store.state.formats': refresh,
+    '$store.state.info': refresh,
     '$store.state.tabs': refresh
   },
 
   methods: {
     download (item) {
-      ytdl(this.$store.state.url, { filter: format => format.itag === item.itag })
+      ytdl(this.$store.state.info.video_url, { filter: format => format.itag === item.itag })
         .on('progress', (chunkLength, downloaded, total) => {
           item.progress = downloaded / total
         })
         .on('end', () => {
           item.progress = 0
         })
-        .pipe(fs.createWriteStream(`${item.itag}.${this.extension}`))
+        .pipe(fs.createWriteStream(`${this.$store.state.info.title}.${this.extension}`))
     }
   }
 }
