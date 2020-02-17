@@ -61,6 +61,7 @@ export default {
   methods: {
     update () {
       const reset = () => {
+        this.$store.state.info = []
         this.title = 'Youtube Downloader'
         this.img = ''
       }
@@ -70,6 +71,7 @@ export default {
           ytdl.getInfo(ytdl.getURLVideoID(this.url), { lang: 'kr' }, (err, info) => {
             if (err) throw err
             this.$store.state.info = info
+            this.title = info.title
             this.img = 'https://i.ytimg.com/vi/' + info.video_id + '/maxresdefault.jpg'
           })
         } else {

@@ -58,12 +58,13 @@ import fs from 'fs'
 function refresh () {
   this.desserts = []
   this.extension = this.$store.state.tabs === 'Video' ? 'mp4' : 'mp3'
-  let formats = ytdl.filterFormats(this.$store.state.info.formats, this.$store.state.tabs === 'Video' ? 'videoonly' : 'audioonly')
-  for (const i of ytdl.filterFormats(this.$store.state.info.formats, 'audioandvideo')) {
-    formats.push(i)
-  }
 
-  if (formats) {
+  if (this.$store.state.info.formats) {
+    let formats = ytdl.filterFormats(this.$store.state.info.formats, this.$store.state.tabs === 'Video' ? 'videoonly' : 'audioonly')
+    for (const i of ytdl.filterFormats(this.$store.state.info.formats, 'audioandvideo')) {
+      formats.push(i)
+    }
+
     for (const i of formats) {
       this.desserts.push(
         {
